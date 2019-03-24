@@ -22,9 +22,15 @@
               </li>
         </nav>
     <div id="editor">
-      <div id ="description bar"></div>
+      <div id ="description-bar">
+          <label for="Formatting">Formatting</label>
+          <label for="font">Font</label>
+          <label for="font-size">Font Size</label>
+          <label for="font-color">Font Color</label>
+          <label for="bg-color">Background Color</label>
+      </div>
             <div id="toolbar-1" class="toolbar">
-                    <select name=" formatBlock " onchange="formatDoc('formatblock',this[this.selectedIndex].value);">
+                  <select  class="form-control" name=" formatBlock " id ="Formatting" onchange="formatDoc('formatblock',this[this.selectedIndex].value);">
                     <option value="p">Paragraph &lt;p&gt;</option>
                     <option value="h1">Title 1 &lt;h1&gt;</option>
                     <option value="h2">Title 2 &lt;h2&gt;</option>
@@ -34,13 +40,16 @@
                     <option value="h6">Subtitle &lt;h6&gt;</option>
                     <option value="pre">Preformatted &lt;pre&gt;</option>
                     </select>
-                    <select onchange="formatDoc('fontname',this[this.selectedIndex].value);">
+
+                  <select class="form-control" id="font" onchange="formatDoc('fontname',this[this.selectedIndex].value);">
                     <option >Arial</option>
                     <option>Arial Black</option>
                     <option>Courier New</option>
                     <option>Times New Roman</option>
                     </select>
-                    <select onchange="formatDoc('fontsize',this[this.selectedIndex].value);">
+                
+              
+                  <select  class="form-control" id="font-size" onchange="formatDoc('fontsize',this[this.selectedIndex].value);">
                     <option value="3" >Normal</option>
                     <option value="1">Very small</option>
                     <option value="2">A bit small</option>
@@ -49,19 +58,23 @@
                     <option value="6">Very big</option>
                     <option value="7">Maximum</option>
                     </select>
-                    <select onchange="formatDoc('forecolor',this[this.selectedIndex].value);">
+                
+                  
+                   <select  class="form-control" id="font-color" onchange="formatDoc('forecolor',this[this.selectedIndex].value);">
                     <option value="black">Black</option>
                     <option value="red">Red</option>
                     <option value="blue">Blue</option>
                     <option value="green">Green</option>
                     </select>
-                    <select onchange="formatDoc('backcolor',this[this.selectedIndex].value);">
+                
+                  
+                  <select class="form-control" id="bg-color" onchange="formatDoc('backcolor',this[this.selectedIndex].value);">
                     <option value="white">white</option>  
                     <option value="red">Red</option>
                     <option value="green">Green</option>
                     <option value="black">Black</option>
                     </select>
-                    </div>
+                </div>
         <div id="toolbar-2" class="toolbar">
                 <a class="intLink" title="Bold" onclick="formatDoc('bold');" href="#"><i class="fas fa-bold"></i></a>
                 <a class="intLink" title="Italic" onclick="formatDoc('italic');"href="#"><i class="fas fa-italic"></i></a> 
@@ -77,14 +90,13 @@
                 <a class="intLink" title="outdent" onclick="formatDoc('outdent');"href="#"><i class="fas fa-outdent"></i></a>
                 <a class="intLink" title="Add link" id="link_btn" href="#" data-toggle="modal" data-target="#url_input_form"><i class="fas fa-link"></i></a>
                 <a class="intLink" title="Add Image" href="#" data-toggle="modal" data-target="#image_input_form"><i class="fas fa-image"></i></a>
+                <button onclick="$('#editor-textbox').toggleClass('DarkMode');">Dark mode</button>
         </div>
         
   <div contenteditable="true" id="editor-textbox" name="content">
 </div>
-
+</div>
 <button id="save-btn" data-toggle="modal" data-target="#save_form">Save</button>
-    
-    </div>
     
     <div class="modal fade" id ="image_input_form" role="dialog" aria-labelledby="image_input" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
