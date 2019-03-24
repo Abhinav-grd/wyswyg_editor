@@ -12,28 +12,39 @@ $(".toolbar a").click(function(){
     $(this).toggleClass("selected")
 });
 
-// Get the modal
-var modal = document.getElementById('myModal');
-
-// Get the button that opens the modal
-var btn = document.getElementById("link_btn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal.style.display = "block";
+function add_image() {
+  var url =document.getElementById("image-url").value;
+  var width=document.getElementById("image-url").value;
+  var height=document.getElementById("image-height").value;
+  document.execCommand("insertImage", false, url); 
+  oDoc.focus(); 
+  var image=$("img");
+  image.css("display", "block");
+  image.css("margin","auto");
+  image.css("width",width+"px");
+  image.css("height",height+"px");
 }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
+function add_url(){
+  var url =document.getElementById("urls-url").value;
+  var s ="<a href="+url+">";
+  /*if($("#blank_check").value=="on")
+    s+="target=\"blank\">"+$(#url-disp_text).value+"</a>";
+  else*/
+    s+=$("#url-disp_text").val()+"</a>";
+//console.log(s);
+  document.execCommand("insertHTML", false, s); 
 }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
+
+function save_doc()
+{
+  var data={
+    name:$("#doc-name").val(),
+    owner:$("#doc-owner").val(),
+    content:String(document.getElementById("editor-textbox").innerHTML),
+  };
+  console.log(document.getElementById("editor-textbox").innerHTML);
+  $.post("/docs",data,function(data,status){
+  });
 }

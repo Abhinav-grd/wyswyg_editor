@@ -79,9 +79,8 @@
                 <a class="intLink" title="Add Image" href="#" data-toggle="modal" data-target="#image_input_form"><i class="fas fa-image"></i></a>
         </div>
         
-  <div contenteditable="true" id="editor-textbox" name="content">
+  <div id="editor-textbox">
 </div>
-
 <button id="save-btn" data-toggle="modal" data-target="#save_form">Save</button>
     
     </div>
@@ -144,7 +143,7 @@
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="blank_check">
                             <label class="form-check-label" for="blank_check">
-                              Open link in ANother Wondow
+                              Open link in Another Window
                             </label>
                           </div>
                         </div>
@@ -185,8 +184,19 @@
           </div>
         </div>
     <script src="../scripts/libs/jquery.js"></script>
-
-<script src="../scripts/main.js"></script>
+<script>
+  var s='<%=doc[0].content%>';
+  function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+var q=decodeHtml(s)
+  //decodeURIComponent(uri_enc);
+  $("#editor-textbox").html(q) ;
+  $("#editor-textbox").attr("contenteditable","true");
+</script>
+    <script src="../scripts/main.js"></script>
     <script src ="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
