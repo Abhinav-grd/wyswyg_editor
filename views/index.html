@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>MY editor</title>
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/main.css">
+</head>
+
+<body onload="initDoc();">
+  <!--<h1 id="heading">A WYSWYG Editor</h1>-->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">WYSWYG Editor</a>
+
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" id="open-btn" data-toggle="modal" data-target="#open_form">Open</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" id="saveas-btn" data-toggle="modal" data-target="#save_form">Save As</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" id="save-btn" >Save</a>
+      </li>
+  </nav>
+  <div id="editor">
+    <div id="description-bar">
+      <label for="Formatting">Formatting</label>
+      <label for="font">Font</label>
+      <label for="font-size">Font Size</label>
+      <label for="font-color">Font Color</label>
+      <label for="bg-color">Highlight Color</label>
+    </div>
+    <div id="toolbar-1" class="toolbar">
+      <select class="form-control" name=" formatBlock " id="Formatting"
+        onchange="formatDoc('formatblock',this[this.selectedIndex].value);">
+        <option value="p">Paragraph &lt;p&gt;</option>
+        <option value="h1">Title 1 &lt;h1&gt;</option>
+        <option value="h2">Title 2 &lt;h2&gt;</option>
+        <option value="h3">Title 3 &lt;h3&gt;</option>
+        <option value="h4">Title 4 &lt;h4&gt;</option>
+        <option value="h5">Title 5 &lt;h5&gt;</option>
+        <option value="h6">Subtitle &lt;h6&gt;</option>
+        <option value="pre">Preformatted &lt;pre&gt;</option>
+      </select>
+
+      <select class="form-control" id="font" onchange="formatDoc('fontname',this[this.selectedIndex].value);">
+        <option>Arial</option>
+        <option>Arial Black</option>
+        <option>Courier New</option>
+        <option>Times New Roman</option>
+      </select>
+
+
+      <select class="form-control" id="font-size" onchange="formatDoc('fontsize',this[this.selectedIndex].value);">
+        <option value="1px">1px</option>
+        <option value="2px">2px</option>
+        <option value="3px">3px</option>
+        <option value="4px">4px</option>
+        <option value="5px">5px</option>
+        <option value="6px">6px</option>
+        <option value="7px">7px</option>
+      </select>
+
+
+      <select class="form-control" id="font-color" onchange="formatDoc('forecolor',this[this.selectedIndex].value);">
+        <option value="black">Black</option>
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+      </select>
+
+
+      <select class="form-control" id="bg-color" onchange="formatDoc('backcolor',this[this.selectedIndex].value);">
+        <option value="white">white</option>
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="black">Black</option>
+      </select>
+    </div>
+    <div id="toolbar-2" class="toolbar">
+      <a class="independent" title="Bold" onclick="formatDoc('bold');" href="#"><i class="fas fa-bold"></i></a>
+      <a class="independent" title="Italic" onclick="formatDoc('italic');" href="#"><i class="fas fa-italic"></i></a>
+      <a class="independent" title="strikethrough" onclick="formatDoc('strikethrough');" href="#"><i
+          class="fas fa-strikethrough"></i></a>
+      <a class="independent" title="Underline" onclick="formatDoc('underline');" href="#"><i
+          class="fas fa-underline"></i></a>
+      <a class="align"  title="left-align" onclick="formatDoc('justifyLeft');" href="#"><i
+          class="fas fa-align-left"></i></a>
+      <a class=" align" title="right-align" onclick="formatDoc('justifyRight');" href="#"><i
+          class="fas fa-align-right"></i></a>
+      <a class=" align" title="center-align" onclick="formatDoc('justifyCenter');" href="#"><i
+          class="fas fa-align-center"></i></a>
+      <a class=" align" title="Justify-content" onclick="formatDoc('justifyFull');" href="#"><i
+          class="fas fa-align-justify"></i></a>
+      
+      <a class="list" title="ol" onclick="formatDoc('insertOrderedList');" href="#"><i
+          class="fas fa-list-ol"></i></a>
+      <a class="list" title="ul" onclick="formatDoc('insertUnorderedList');" href="#"><i
+          class="fas fa-list-ul"></i></a>
+
+      <a  title="indent" onclick="formatDoc('indent');" href="#"><i class="fas fa-indent"></i></a>
+      <a  title="outdent" onclick="formatDoc('outdent');" href="#"><i class="fas fa-outdent"></i></a>
+
+      <a  title="Add link" id="link_btn" href="#" data-toggle="modal" data-target="#url_input_form"><i
+          class="fas fa-link"></i></a>
+      <a  title="Add Image" href="#" data-toggle="modal" data-target="#image_input_form"><i
+          class="fas fa-image"></i></a>
+
+      <button id="dark_btn" class="btn btn-dark" onclick="$('#editor-textbox').toggleClass('DarkMode');">Dark mode</button>
+    </div>
+
+    <div contenteditable="true" id="editor-textbox" name="content">
+    </div>
+  </div>
+
+  <!-- MODAL FOR PROMPT WINDOWS-->
+
+  <!-- FOR IMAGE INPUT -->
+  <div class="modal fade" id="image_input_form" role="dialog" aria-labelledby="image_input" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="image_input">Insert Image</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="image-url">Source</label>
+            <input type="text" class="form-control" id="image-url" placeholder="Image Url">
+          </div>
+          <div class="form-group">
+            <label for="image-desc">Image Description</label>
+            <input type="text" class="form-control" id="image-desc" placeholder="Image Caption text">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="image-width">Width</label>
+              <input type="text" class="form-control" id="image-width" placeholder="Leave Empty for Default Size">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="image-height">Height</label>
+              <input type="text" class="form-control" id="image-height" placeholder="Leave Empty for Default Size">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" onclick="add_image();" data-dismiss="modal">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- FOR URL INPUT -->
+
+
+  <div class="modal fade" id="url_input_form" role="dialog" aria-labelledby="url_input" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="url_input">Insert URL</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="urls-url">Url </label>
+            <input type="text" class="form-control" id="urls-url" placeholder="Url">
+          </div>
+          <div class="form-group">
+            <label for="url-disp_text">Display Text</label>
+            <input type="text" class="form-control" id="url-disp_text" placeholder="Display Text">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" onclick="add_url();" data-dismiss="modal">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOR SAVE -AS OPTION -->
+  <div class="modal fade" id="save_form" role="dialog" aria-labelledby="save" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="save">Save Document</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="urls-url">Name </label>
+            <input type="text" class="form-control" id="doc-name" value="Doc1">
+          </div>
+          <div class="form-group">
+            <label for="url-disp_text">Owner</label>
+            <input type="text" class="form-control" id="doc-owner" placeholder="Owner">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" onclick="save_doc();" data-dismiss="modal">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOR OPEN OPTION -->
+  <div class="modal fade" id="open_form" role="dialog" aria-labelledby="save" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="save">Open Document</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="urls-url">Name of Document </label>
+              <input type="text" class="form-control" id="doc-name" >
+            </div>
+            <div class="form-group">
+              <label for="url-disp_text">Owner's Name</label>
+              <input type="text" class="form-control" id="doc-owner" >
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" onclick="save_doc();" data-dismiss="modal">Open</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <script src="../scripts/libs/jquery.js"></script>
+
+  <script src="../scripts/main.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

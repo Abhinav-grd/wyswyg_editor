@@ -1,18 +1,34 @@
 var oDoc;
+var align_btn=$(".toolbar a.align");
+var ind_btn=$(".toolbar a.independent");
+var list_btn=$(".toolbar a.list");
+
+//console.log(align_btn);
 function initDoc() {
-    oDoc = document.getElementById("editor-textbox"); 
+    oDoc = $("#editor-textbox"); 
+    init_btn_listener();
  }
+
+ function init_btn_listener(){
   
+    ind_btn.click(function(){
+      $(this).toggleClass("selected");
+    });
+
+  align_btn.click(function(){
+    
+      align_btn.removeClass("selected");
+      $(this).addClass("selected");
+});
+}
+
   function formatDoc(sCmd, sValue) {
      document.execCommand(sCmd, false, sValue); 
      oDoc.focus(); 
     }
 
-$(".toolbar a").click(function(){
-    $(this).toggleClass("selected")
-});
-
 function add_image() {
+  oDoc.focus();
   var url =document.getElementById("image-url").value;
   var width=document.getElementById("image-url").value;
   var height=document.getElementById("image-height").value;
@@ -26,6 +42,7 @@ function add_image() {
 }
 
 function add_url(){
+  oDoc.focus();
   var url =document.getElementById("urls-url").value;
   var s ="<a href="+url+">";
   /*if($("#blank_check").value=="on")

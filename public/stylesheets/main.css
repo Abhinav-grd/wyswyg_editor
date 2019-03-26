@@ -3,23 +3,39 @@ body , html {
     padding: 0px;
     background-color: #436d5d;
 }
-#heading{
- text-align: center;   
+
+nav ul li
+{
+    border-right: 2px solid black;
 }
 
 #editor
 {
     background-color: white;
-    margin:10px auto;
+    margin:6% auto;
     width: 90%;
     max-width:1100px;
-    border:2px solid black;
+    /* border:2px solid black; */
+    -webkit-box-shadow: -1px -1px 25px 0px rgba(5,5,5,1);
+    -moz-box-shadow: -1px -1px 25px 0px rgba(5,5,5,1);
+    box-shadow: -1px -1px 25px 0px rgba(5,5,5,1);
+    
 }
 #description-bar
 {
     display:flex;
     border-top: 1px solid #cccccc;
     border-bottom: 1px solid #cccccc;
+    height: 50px;
+    align-items: center;
+}
+#description-bar label
+{
+    width: 20%;
+    text-align: center;
+    border-right:2px solid  #cccccc; 
+    margin: 0px;
+    padding-bottom:8px;
 }
 
 .toolbar
@@ -28,17 +44,19 @@ body , html {
     height: 50px;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    padding: 0px 10px;
+    justify-content:space-around;
 }
 #toolbar-1
 {
+
     border-top: 1px solid #cccccc;
-    line-height:40px;
-    height:40px;
+    height:50px;
 }
 #toolbar-1 select{
-    margin: auto 5px;
+    /* margin: auto 5px; */
+    width: 18%;
+    outline:none;
+
 }
 
 #toolbar-2 a{
@@ -46,14 +64,20 @@ body , html {
 height: 50px;
 width: 40px;
 border-radius: 10%;
-margin: 0px 5px;
+margin: 0px 9px;
 text-decoration: none;
 color: black;
+text-align: center;
+border-right: 1px solid #cccccc;
 }
 #toolbar-2  a i{
     font-size: 20px;
-position: relative;
-left: 12px;
+}
+#dark_btn{
+margin-left:auto; 
+margin-right:5px; 
+font-weight: bold;
+font-size: 17px;
 }
 a:hover
 {
