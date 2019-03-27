@@ -1,20 +1,13 @@
 var oDoc;
 var align_btn=$(".toolbar a.align");
-var ind_btn=$(".toolbar a.independent");
-var list_btn=$(".toolbar a.list");
-
-//console.log(align_btn);
+initDoc();
 function initDoc() {
     oDoc = $("#editor-textbox"); 
     init_btn_listener();
- }
 
+ }
  function init_btn_listener(){
   
-    ind_btn.click(function(){
-      $(this).toggleClass("selected");
-    });
-
   align_btn.click(function(){
     
       align_btn.removeClass("selected");
@@ -23,8 +16,15 @@ function initDoc() {
 }
 
   function formatDoc(sCmd, sValue) {
+     oDoc.focus();
      document.execCommand(sCmd, false, sValue); 
-     oDoc.focus(); 
+     if(sCmd=='fontsize' && $( "#bg-color option:selected" ).text()!=='white')
+     {
+       var color=$( "#bg-color option:selected" ).text();
+       //console.log($( "#bg-color option:selected" ).text());
+      document.execCommand('backcolor',false,'white');
+      document.execCommand('backcolor',false,color);
+     }
     }
 
 function add_image() {
@@ -56,12 +56,62 @@ function add_url(){
 
 function save_doc()
 {
+  var cont= document.getElementById("editor-textbox").innerHTML;
+   cont=cont.replace(/\n/g, " ");
   var data={
     name:$("#doc-name").val(),
-    owner:$("#doc-owner").val(),
-    content:String(document.getElementById("editor-textbox").innerHTML),
+    author:$("#doc-owner").val(),
+    content:cont,
   };
-  console.log(document.getElementById("editor-textbox").innerHTML);
-  $.post("/docs",data,function(data,status){
+  $.post("/docs/save",data)
+  .done(function(red_url){
+    window.location.href=red_url;
+  });
+  saving();
+}
+function update_doc()
+{
+  var id=(window.location.href).slice((window.location.href).lastIndexOf('/')+1,);
+  if(id[id.length-1]=='#')
+    id=id.slice(0,id.length-1);
+  if(id=='')
+    save_doc();
+  else{
+    console.log(id);
+  var cont= document.getElementById("editor-textbox").innerHTML;
+   cont=cont.replace(/\n/g, " ");
+  var data={
+    name:$("#doc-name").val(),
+    author:$("#doc-owner").val(),
+    content:cont,
+    id:id
+  };
+  $.post("/docs/update",data)
+  .done(function(a){
+    console.log("doc updated");
+    $("#saved").css("display","block");
+    $("#saved").addClass("show");
+    setTimeout(function(){
+      $("#saved").removeClass("show");
+      $("#saved").css("display","none");
+    },2000);
   });
 }
+saving();
+}
+var Doc_saved = false;
+var saving = function() { Doc_saved = true; };
+var unsaved= function() {Doc_saved=false;};
+window.onload = function() {
+    window.addEventListener("beforeunload", function (e) {
+        if (Doc_saved) {
+            return undefined;
+        }
+
+        var confirmationMessage = 'It looks like you have been editing something. '
+                                + 'If you leave before saving, your changes will be lost.';
+
+        (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+        return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+    });
+};

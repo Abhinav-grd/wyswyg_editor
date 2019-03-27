@@ -3,7 +3,7 @@ var app =express();
 var bodyParser  =require("body-parser");
 var mongoose    =require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/wyswyg_editor", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost:27017/editor", { useNewUrlParser: true });
 
 app.set("view engine","ejs");
 
@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 var docSchema=new mongoose.Schema({
     name:String,
-    owner:String,
+    author:String,
     content:String
 });
 
@@ -24,7 +24,6 @@ var Doc= mongoose.model("Doc",docSchema);
 app.get("/",function(req, res){
     res.render("index");
 });
-
 
 
 app.get('/docs',function(req,res){
@@ -38,48 +37,46 @@ app.get('/docs',function(req,res){
 
 
 var num=1;
-app.post("/docs",function(req, res){
+app.post("/docs/save",function(req, res){
     var new_doc=req.body;
-    console.log(new_doc);
-    if(req.body.name=="")
+    if(new_doc['name']=='')
         new_doc.name="doc"+(num++);
     Doc.create(new_doc, function(err,newly_created){
         if(err)
         console.log(err);
         else{
-        console.log("data saved in db");
-        console.log(newly_created);
-        res.redirect("/");
+        var red_url="/docs/"+newly_created.id;
+        res.send(red_url);
     }
     });
 });
-
-
-/*
-app.get("/campgrounds/:id" ,function(req, res){
-    Camp.findById(req.params.id,function(err ,matched_camp){
-        if(err){
-            console.log(err);
-        }
+app.post("/docs/update",function(req, res){
+    var new_doc=req.body;
+    var update_data={
+        name:req.body.name,
+    author:req.body.author,
+    content:req.body.content
+    }
+    Doc.findOneAndUpdate({id:new_doc.id},update_data,function(err,updated){
+        if(err)
+        console.log(err);
         else{
-            res.render("show" ,{camp:matched_camp});
-        }
+        res.send("success");
+    }
     });
+});
+app.get("/docs/:id",function(req,res){
     
-})
-*/
-
-app.get("/docs/:name",function(req,res){
-    Doc.find({name:req.params.name},function(err,matched_doc){
+    Doc.findById(req.params.id,function(err,matched_doc){
         if(err){
-            console.log(err);
+            res.send("Document not found");
         }
         else{
-            console.log(matched_doc);
             res.render("preview",{doc:matched_doc});
         }
     });
 });
+
 app.listen(process.env.PORT , process.env.IP ,function(){
     console.log(" Server Started!!....");
 });
