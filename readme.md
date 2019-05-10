@@ -1,13 +1,5 @@
-<h1>Team Name- Its_One</h1><br/>
-<br/>
-Members-<br/>
-Member 1: Abhinav kumar (https://github.com/abhinav-grd)<br/>
-Member 2: Rahul Agarwal (https://github.com/RahulRexx)<br/>
 
-<br>
-<br>
-The Text editor App is hosted on - <a href="https://online-text-editor.herokuapp.com/">Online-text-editor</a>
-<br>
+<p>It is a project for the DevHack-0.2 event organised by ACM Bit Mesra<p>
 <br>
 </br>
 <h2>Online WYSWYG (What You See Is What You Get) Text Editor</h2>
