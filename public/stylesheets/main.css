@@ -1,18 +1,19 @@
 body , html {
     margin:0px;
     padding: 0px;
-    background-color: #436d5d;
+    background-color: #507d7d;
 }
-
 nav ul li
 {
-    border-right: 2px solid black;
+    border-right: 2px solid #cccccc;
 }
-
+nav ul li a
+{ cursor: pointer; }
 #editor
 {
     background-color: white;
     margin:6% auto;
+    border-radius:12px;
     width: 90%;
     max-width:1100px;
     /* border:2px solid black; */
