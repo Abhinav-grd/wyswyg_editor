@@ -2,6 +2,8 @@
 <p>It is a project for the DevHack-0.2 event organised by ACM Bit Mesra<p>
 <br>
 </br>
+The Text editor App is hosted on - <a href="https://online-text-editor.herokuapp.com/">Online-text-editor</a>
+<br>
 <h2>Online WYSWYG (What You See Is What You Get) Text Editor</h2>
 This web app can be used to create and edit documents using features like bullets, bold, italic, font_color etc.
 
