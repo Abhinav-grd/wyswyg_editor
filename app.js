@@ -6,7 +6,22 @@ var mongoose    =require("mongoose");
 // For Heroku
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/editor", { useNewUrlParser: true });
+const InitiateMongoServer = async () => {
+    try {
+        await mongoose.connect(process.env.DB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false
+        });
+        console.log("Connected to DB !!");
+    }
+    catch (e) {
+        console.log(e);
+        throw e;
+    }
+}
+
+InitiateMongoServer();
 
 app.set("view engine","ejs");
 
@@ -15,8 +30,6 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 
 var docSchema=new mongoose.Schema({
-    name:String,
-    author:String,
     content:String
 });
 
@@ -28,22 +41,8 @@ app.get("/",function(req, res){
     res.render("index");
 });
 
-
-app.get('/docs',function(req,res){
-    Doc.find(function(err ,docs){
-        if(err)
-            console.log(err);
-        else 
-        res.render("doc_list",{docs:docs});
-    });
-});
-
-
-var num=1;
 app.post("/docs/save",function(req, res){
     var new_doc=req.body;
-    if(new_doc['name']=='')
-        new_doc.name="doc"+(num++);
     Doc.create(new_doc, function(err,newly_created){
         if(err)
         console.log(err);
@@ -53,21 +52,23 @@ app.post("/docs/save",function(req, res){
     }
     });
 });
+
 app.post("/docs/update",function(req, res){
-    var new_doc=req.body;
+    console.log(req.body);
     var update_data={
-        name:req.body.name,
-    author:req.body.author,
-    content:req.body.content
-    }
-    Doc.findOneAndUpdate({id:new_doc.id},update_data,function(err,updated){
-        if(err)
-        console.log(err);
+        content:req.body.content
+    };
+    Doc.findOneAndUpdate({_id:req.body.id},update_data,{new: true},function(err,updated_doc){
+        if(err){
+        console.log("error");
+        }
         else{
+        // console.log(updated_doc);
         res.send("success");
     }
     });
 });
+
 app.get("/docs/:id",function(req,res){
     
     Doc.findById(req.params.id,function(err,matched_doc){
@@ -75,11 +76,12 @@ app.get("/docs/:id",function(req,res){
             res.send("Document not found");
         }
         else{
+            // console.log(matched_doc);
             res.render("preview",{doc:matched_doc});
         }
     });
 });
 
-app.listen(process.env.PORT , process.env.IP ,function(){
+app.listen(process.env.PORT || 3000,function(){
     console.log(" Server Started!!....");
 });
