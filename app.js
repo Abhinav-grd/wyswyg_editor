@@ -28,6 +28,7 @@ app.get("/",function(req, res){
     res.render("index");
 });
 
+
 app.get('/docs',function(req,res){
     Doc.find(function(err ,docs){
         if(err)
