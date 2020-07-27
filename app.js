@@ -3,7 +3,10 @@ var app =express();
 var bodyParser  =require("body-parser");
 var mongoose    =require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/editor", { useNewUrlParser: true });
+// For Heroku
+require('dotenv').config();
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/editor", { useNewUrlParser: true });
 
 app.set("view engine","ejs");
 
@@ -17,14 +20,13 @@ var docSchema=new mongoose.Schema({
     content:String
 });
 
-//model fromation
+//model formation
 var Doc= mongoose.model("Doc",docSchema);
 
 
 app.get("/",function(req, res){
     res.render("index");
 });
-
 
 app.get('/docs',function(req,res){
     Doc.find(function(err ,docs){
